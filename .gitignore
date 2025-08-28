@@ -1,0 +1,4 @@
+env/
+digest.txt
+build/
+__pycache__
