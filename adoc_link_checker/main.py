@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import requests
-from config import (
+from adoc_link_checker.config import (
     ROOT_DIR, TIMEOUT, MAX_WORKERS, DELAY, USER_AGENT, BLACKLIST,
     LINK_PATTERNS, LOGGING_CONFIG, RETRY_CONFIG, OUTPUT_FILE
 )

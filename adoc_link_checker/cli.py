@@ -1,8 +1,8 @@
 import click
 import logging
 import os
-from main import run_check
-from config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUTPUT_FILE, LOGGING_CONFIG
+from adoc_link_checker.main import run_check
+from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUTPUT_FILE, LOGGING_CONFIG
 
 @click.command()
 @click.argument(
@@ -52,7 +52,7 @@ def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose):
     """Vérifie les liens brisés dans les fichiers .adoc du répertoire ROOT_DIR."""
     if verbose:
         LOGGING_CONFIG["level"] = logging.DEBUG
-    logging.basicConfig(**LOGGING_CONFIG)
+    logging.basicConfig(level=LOGGING_CONFIG["level"], format=LOGGING_CONFIG["format"], force=True)
     logger = logging.getLogger(__name__)
     logger.info(f"🔍 Démarrage de la vérification dans {os.path.abspath(root_dir)}")
     run_check(
