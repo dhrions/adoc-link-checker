@@ -1,1 +1,7 @@
 https://github.com/ton-org/adoc-link-checker.git
+https://github.com/dhrions/adoc-link-checker/issues
+https://exemple.com/lien-a-exclure
+https://dev.exemple.com
+https://exemple.com/lien-temporaire
+https://exemple.com/api
+https://github.com/ton-org/adoc-link-checker/blob/main/LICENSE
