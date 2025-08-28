@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adoc-link-checker"
+version = "1.0.0"
+authors = [{ name = "dhrions", email = "ton@email.com" }]
+description = "Outil pour vérifier les liens brisés dans les fichiers AsciiDoc."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0.0",
+    "requests>=2.30.0",
+    "urllib3>=2.0.0",
+]
+
+[project.scripts]
+adoc-link-checker = "adoc_link_checker.cli:cli"
