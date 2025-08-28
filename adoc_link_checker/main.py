@@ -58,25 +58,23 @@ def extract_links_from_file(file_path: str) -> set:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        logger.debug(
-            f"DEBUG: Contenu du fichier {file_path}:\n{content}")  # Debug
         links = set()
         for pattern in LINK_PATTERNS:
             for match in re.finditer(pattern, content):
                 if pattern == LINK_PATTERNS[1]:  # video::youtube_id
                     youtube_id = match.group(1)
                     url = youtube_id_to_url(youtube_id)
+                    logger.debug(f"DEBUG: YouTube ID={youtube_id}, URL={url}")  # Débogage
                 else:
                     url = match.group(0).replace('link:', '')
-                url = normalize_url(url)
+                    url = normalize_url(url)
                 if is_valid_url(url):
                     links.add(url)
-                    logger.debug(f"DEBUG: Lien extrait : {url}")  # Debug
         return links
     except Exception as e:
-        logger.debug(
-            f"DEBUG: Erreur lors de la lecture de {file_path}: {e}")  # Debug
+        logger.debug(f"Erreur lors de la lecture de {file_path}: {e}")
         return set()
+
 
 
 def process_file(session: requests.Session, file_path: str, delay: float, timeout: int) -> list:
