@@ -1,0 +1,6 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: trailing-whitespace # Supprime les espaces en fin de ligne
+  - id: end-of-file-fixer # Ajoute une ligne vide à la fin des fichiers
