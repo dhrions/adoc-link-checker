@@ -16,9 +16,20 @@ setup(
         "certifi==2025.8.3",
         "charset-normalizer==3.4.3",
         "click==8.2.1",
+        "coverage==7.10.5",
         "idna==3.10",
+        "iniconfig==2.1.0",
+        "packaging==25.0",
+        "pluggy==1.6.0",
+        "Pygments==2.19.2",
+        "pytest==8.4.1",
+        "pytest-cov==6.2.1",
+        "pytest-mock==3.14.1",
+        "pytest-responses==0.5.1",
+        "PyYAML==6.0.2",
         "requests==2.32.5",
-        "urllib3==2.5.0",
+        "responses==0.25.8",
+        "urllib3==2.5.0"
     ],
     entry_points={
         "console_scripts": [
