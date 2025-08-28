@@ -43,21 +43,40 @@ from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUT
     help="Domain to ignore (can be specified multiple times).",
 )
 @click.option(
-    "--verbose",
-    is_flag=True,
-    help="Active verbose mode (DEBUG).",
-)
-@click.option(
     "--exclude-from",
     type=click.Path(exists=True, dir_okay=False),
     default=None,
     help="File with list of links to exclude (a link by line).",
 )
+@click.option(
+    "-v",
+    "--verbose",
+    count=True,  # Permet de compter le nombre de fois que -v est utilisé
+    help="Augmente la verbosité (INFO avec -v, DEBUG avec -vv).",
+)
+@click.option(
+    "--quiet",
+    is_flag=True,
+    help="Désactive les logs sauf les erreurs (niveau ERROR).",
+)
+@click.option(
+    "--log-file",
+    type=click.Path(),
+    default=None,
+    help="Fichier pour enregistrer les logs (en plus de la console).",
+)
 @click.version_option(version="1.0.0")
-def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose, exclude_from):
+def cli(root_dir, timeout, max_workers, delay, output, blacklist, exclude_from, verbose, quiet, log_file):
     """Check broken links in .adoc files"""
-    if verbose:
+    # Configuration du niveau de log selon la verbosité
+    if quiet:
+        LOGGING_CONFIG["level"] = logging.ERROR
+    elif verbose == 1:  # -v
+        LOGGING_CONFIG["level"] = logging.INFO
+    elif verbose >= 2:  # -vv ou plus
         LOGGING_CONFIG["level"] = logging.DEBUG
+    else:  # Par défaut
+        LOGGING_CONFIG["level"] = logging.WARNING
     logging.basicConfig(level=LOGGING_CONFIG["level"], format=LOGGING_CONFIG["format"], force=True)
     logger = logging.getLogger(__name__)
     logger.info(f"🔍 Begin check in {os.path.abspath(root_dir)}")
