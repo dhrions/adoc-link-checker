@@ -107,10 +107,10 @@ def process_file(session: requests.Session, file_path: str, delay: float, timeou
     for url in links:
         time.sleep(delay)
         if not check_url(session, url, timeout, tuple(blacklist)):
-            logger.warning(f"❌ Broken URL: {url}")
+            logger.warning(f"  ❌ Broken URL: {url}")
             broken_links.append((url, "URL not accessible"))
         else:
-            logger.info(f"✅ URL checked: {url}")
+            logger.info(f"  ✅ URL checked: {url}")
     return broken_links
 
 def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, output_file: str, blacklist: list, exclude_from: str) -> None:
