@@ -1,7 +1,7 @@
 import click
 import logging
 import os
-from adoc_link_checker.main import run_check
+from adoc_link_checker.runner import run_check
 from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUTPUT_FILE, LOGGING_CONFIG
 
 @click.command()
