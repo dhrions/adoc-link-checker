@@ -94,6 +94,8 @@ def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, outpu
     """Lance la vérification des liens dans les fichiers .adoc."""
     broken_links = {}
     adoc_files = []
+    total_urls_checked = 0
+
     for root, _, files in os.walk(root_dir):
         for file in files:
             if file.endswith('.adoc'):
@@ -104,7 +106,6 @@ def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, outpu
     logger.info(f"🔍 Found {len(adoc_files)} .adoc files. Checking URLs...")
 
     session = create_session()
-
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
             executor.submit(process_file, session, file, delay, timeout, blacklist, excluded_urls): file
@@ -116,8 +117,14 @@ def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, outpu
                 file_broken_links = future.result()
                 if file_broken_links:
                     broken_links[file] = file_broken_links
+                # Compter le nombre d'URLs traitées dans ce fichier
+                links_in_file = extract_links_from_file(file)
+                total_urls_checked += len(links_in_file)
             except Exception as e:
                 logger.error(f"Error processing {file}: {e}")
+
+    # Afficher le nombre total d'URLs traitées
+    logger.info(f"📊 Total URLs checked: {total_urls_checked}")
 
     if not broken_links:
         logger.info("✅ No broken URLs found!")
@@ -131,3 +138,4 @@ def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, outpu
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(broken_links, f, indent=2, ensure_ascii=False)
     logger.info(f"📊 Results saved to {output_file}.")
+
