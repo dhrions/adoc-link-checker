@@ -90,7 +90,7 @@ def process_file(session: requests.Session, file_path: str, delay: float, timeou
     return broken_links
 
 
-def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, output_file: str, blacklist: list) -> None:
+def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, output_file: str, blacklist: list, exclude_from: str) -> None:
     broken_links = {}
     adoc_files = []
     for root, _, files in os.walk(root_dir):

@@ -47,8 +47,14 @@ from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUT
     is_flag=True,
     help="Active le mode verbeux (DEBUG).",
 )
+@click.option(
+    "--exclude-from",
+    type=click.Path(exists=True, dir_okay=False),
+    default=None,
+    help="Fichier contenant la liste des liens à exclure (un lien par ligne).",
+)
 @click.version_option(version="1.0.0")
-def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose):
+def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose, exclude_from):
     """Vérifie les liens brisés dans les fichiers .adoc du répertoire ROOT_DIR."""
     if verbose:
         LOGGING_CONFIG["level"] = logging.DEBUG
@@ -62,6 +68,7 @@ def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose):
         timeout=timeout,
         output_file=output,
         blacklist=BLACKLIST + list(blacklist),
+        exclude_from=exclude_from
     )
     logger.debug(f"DEBUG: Fichier de sortie : {os.path.abspath(output)}")  # Debug
 
