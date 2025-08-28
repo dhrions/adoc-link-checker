@@ -1,3 +1,73 @@
-= Ma page d'accueil
+= Adoc Link Checker
+:page-description: Outil de vérification des liens brisés dans les fichiers AsciiDoc.
+:page-keywords: asciidoc, documentation, vérification de liens, antora, outils dev
+:icons: font
+:source-highlighter: pygments
 
-{wikipedia}
+== 🔍 Pourquoi Adoc Link Checker ?
+
+Adoc Link Checker est un outil en ligne de commande conçu pour **automatiser la détection des liens brisés** dans vos fichiers AsciiDoc (`.adoc`).
+Idéal pour les projets de documentation technique utilisant **Antora**, il permet d’éviter les erreurs 404 et d’améliorer la qualité de votre documentation.
+
+=== 🎯 Cas d’usage
+
+- Vérification des liens HTTP/HTTPS dans une base de documentation.
+- Intégration dans un pipeline CI/CD pour valider les liens avant une publication.
+- Détection des identifiants YouTube invalides (ex: `video::dQw4w9WgXcQ[]`).
+- Exclusion de domaines ou de liens spécifiques (blacklist, fichier d’exclusion).
+
+=== 🚀 Fonctionnalités clés
+
+[cols="1,3"]
+|===
+| ✅ **Vérification parallèle** | Utilise des threads pour un traitement rapide des liens.
+| ✅ **Support YouTube** | Vérifie les IDs YouTube (ex: `video::ID[]`).
+| ✅ **Exclusion flexible** | Ignorez des liens ou domaines via une blacklist ou un fichier.
+| ✅ **Rapport détaillé** | Génère un fichier JSON des liens brisés (`broken_links.json`).
+| ✅ **Configuration avancée** | Timeout, délai entre requêtes, nombre de threads, etc.
+| ✅ **Intégration CI** | Retourne un code d’erreur si des liens brisés sont détectés.
+|===
+
+=== 📖 Documentation
+
+- xref:installation.adoc[Installation et configuration]
+- xref:usage.adoc[Guide d’utilisation]
+- xref:configuration.adoc[Options avancées]
+
+=== 🔧 Exemple rapide
+
+[source,bash]
+----
+# Vérifier les liens dans un dossier
+adoc-link-checker ./docs --max-workers 10 --output rapport.json
+
+# Exclure des liens
+adoc-link-checker ./docs --exclude-from exclude_urls.txt
+----
+
+=== 📊 Exemple de sortie
+
+Le fichier `broken_links.json` contient une liste des liens brisés, organisée par fichier :
+[source,json]
+----
+{
+  "./docs/page.adoc": [
+    ["https://lien-brise.com", "URL not accessible (404)"],
+    ["https://timeout.com", "Request timed out"]
+  ]
+}
+----
+
+=== 🤝 Contribuer
+
+Le projet est open source (licence MIT) et les contributions sont les bienvenues !
+
+== 📢 Dernières mises à jour
+
+// - **v1.0.0** : Support des redirections HTTP et amélioration des logs.
+// - **v0.9.0** : Ajout de la vérification des IDs YouTube.
+
+== 💬 Feedback
+
+Rencontrez-vous un problème ou souhaitez-vous une fonctionnalité ?
+Ouvrez une xref:https://github.com/dhrions/adoc-link-checker/issues[issue^] ou soumettez une pull request !

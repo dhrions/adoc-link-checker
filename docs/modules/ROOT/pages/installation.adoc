@@ -1,0 +1,115 @@
+= Installation et configuration
+:page-description: Guide d'installation et de configuration d'Adoc Link Checker.
+:icons: font
+:source-highlighter: pygments
+
+== 📥 Installation
+
+=== Prérequis
+
+- **Python 3.8 ou supérieur**.
+- **pip** pour l’installation des dépendances.
+
+=== Installation depuis le dépôt Git
+
+[source,bash]
+----
+git clone https://github.com/ton-org/adoc-link-checker.git
+cd adoc-link-checker
+pip install -e .
+----
+
+== 🛠 Configuration
+
+=== Fichier d’exclusion
+
+Créez un fichier `exclude_urls.txt` pour lister les liens à exclure (un par ligne) :
+----
+https://exemple.com/lien-a-exclure
+https://autre-exemple.com/ignorer
+----
+
+=== Options de base
+
+[cols="1,2,1"]
+|===
+| Option | Description | Valeur par défaut
+
+| `--timeout` | Timeout pour les requêtes HTTP (secondes). | `15`
+| `--max-workers` | Nombre maximal de threads. | `5`
+| `--delay` | Délai entre chaque requête (secondes). | `0.5`
+| `--output` | Fichier de sortie (JSON). | `broken_links.json`
+| `--blacklist` | Domaine à ignorer (peut être répété). | `[]`
+| `--exclude-from` | Fichier contenant les liens à exclure. | -
+| `-v, --verbose` | Augmente la verbosité (INFO avec `-v`, DEBUG avec `-vv`). | -
+| `--quiet` | Désactive les logs sauf les erreurs. | -
+| `--log-file` | Fichier pour enregistrer les logs. | -
+|===
+
+=== Exemple de configuration avancée
+
+[source,bash]
+----
+adoc-link-checker ./docs \
+  --max-workers 10 \
+  --timeout 20 \
+  --exclude-from exclude_urls.txt \
+  --output rapport.json \
+  -vv
+----
+
+== 🔧 Configuration permanente
+
+Pour éviter de répéter les options, vous pouvez :
+
+. **Définir des variables d’environnement** :
++
+[source,bash]
+----
+export ADOC_LINK_CHECKER_TIMEOUT=20
+export ADOC_LINK_CHECKER_MAX_WORKERS=10
+----
++
+. **Utiliser un fichier `.env`** :
++
+----
+ADOC_LINK_CHECKER_TIMEOUT=20
+ADOC_LINK_CHECKER_MAX_WORKERS=10
+----
+
+== 🧪 Vérification de l’installation
+
+[source,bash]
+----
+adoc-link-checker --version
+# Doit afficher : adoc-link-checker, version 1.0.0
+----
+
+== ⚠️ Dépannage
+
+=== Erreur : `ModuleNotFoundError: No module named 'adoc_link_checker'`
+
+- Vérifiez que Python et pip sont à jour.
+- Réinstallez le package : `pip install --force-reinstall adoc-link-checker`.
+
+=== Erreur : `Permission denied`
+
+- Utilisez `pip install --user adoc-link-checker` ou un environnement virtuel :
+[source,bash]
+----
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+pip install adoc-link-checker
+----
+
+== 🔄 Mise à jour
+
+[source,bash]
+----
+pip install --upgrade adoc-link-checker
+----
+
+== 📜 Licence
+
+Ce projet est sous licence MIT. Voir le fichier xref:https://github.com/ton-org/adoc-link-checker/blob/main/LICENSE[LICENSE^] pour plus de détails.

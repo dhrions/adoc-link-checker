@@ -1,5 +1,4 @@
-xref:root:index.adoc[]
-
-Comprehensive module
-
-* xref:comprehensive-module:README.adoc[Comprensive module]
+* xref:index.adoc[Accueil]
+* xref:installation.adoc[Installation]
+* xref:usage.adoc[Utilisation]
+* xref:configuration.adoc[Configuration]

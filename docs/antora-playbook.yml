@@ -1,7 +1,7 @@
 site:
   title: Adoc Link Checker
 content:
-  branches: main
+  branches: HEAD
   sources:
   - url: ..
     start_path: docs

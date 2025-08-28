@@ -1,0 +1,145 @@
+= Guide d’utilisation
+:page-description: Comment utiliser Adoc Link Checker pour vérifier les liens dans vos fichiers AsciiDoc.
+:icons: font
+:source-highlighter: pygments
+
+== 🚀 Utilisation de base
+
+=== Commande minimale
+Pour vérifier les liens dans un dossier contenant des fichiers `.adoc` :
+[source,bash]
+----
+adoc-link-checker /chemin/vers/vos/fichiers/adoc
+----
+Le résultat sera enregistré dans `broken_links.json`.
+
+=== Exemple complet
+[source,bash]
+----
+adoc-link-checker ./docs \
+  --max-workers 10 \
+  --timeout 20 \
+  --exclude-from exclude_urls.txt \
+  --output rapport.json \
+  -vv
+----
+- `--max-workers 10` : Utilise 10 threads pour accélérer le traitement.
+- `--timeout 20` : Timeout de 20 secondes pour chaque requête.
+- `--exclude-from exclude_urls.txt` : Ignore les liens listés dans ce fichier.
+- `--output rapport.json` : Enregistre le rapport dans `rapport.json`.
+- `-vv` : Active le mode debug pour plus de détails.
+
+=== Sortie standard
+Si des liens brisés sont détectés, le rapport JSON ressemblera à :
+[source,json]
+----
+{
+  "./docs/page1.adoc": [
+    ["https://lien-brise.com", "URL not accessible (404)"],
+    ["https://timeout.com", "Request timed out"]
+  ],
+  "./docs/page2.adoc": [
+    ["https://redirection.com/ancienne-url", "Redirected to https://redirection.com/nouvelle-url"]
+  ]
+}
+----
+
+== 🎯 Cas d’usage avancés
+
+=== Vérifier un fichier spécifique
+[source,bash]
+----
+adoc-link-checker ./docs/page.adoc
+----
+
+=== Ignorer des domaines
+Utilisez `--blacklist` pour ignorer des domaines spécifiques :
+[source,bash]
+----
+adoc-link-checker ./docs \
+  --blacklist "spam.com" \
+  --blacklist "ads.example"
+----
+
+=== Exclure des liens via un fichier
+Créez un fichier `exclude_urls.txt` :
+----
+https://exemple.com/lien-a-exclure
+https://autre-exemple.com/ignorer
+----
+Puis exécutez :
+[source,bash]
+----
+adoc-link-checker ./docs --exclude-from exclude_urls.txt
+----
+
+=== Mode silencieux
+Pour désactiver les logs (sauf les erreurs) :
+[source,bash]
+----
+adoc-link-checker ./docs --quiet
+----
+
+=== Enregistrer les logs dans un fichier
+[source,bash]
+----
+adoc-link-checker ./docs --log-file logs/adoc-link-checker.log
+----
+
+=== Vérifier uniquement les liens YouTube
+Adoc Link Checker détecte automatiquement les IDs YouTube (ex: `video::dQw4w9WgXcQ[]`) et vérifie leur validité.
+
+== 🔄 Intégration CI/CD
+
+=== Exemple avec GitHub Actions
+Créez un fichier `.github/workflows/check-links.yml` :
+[source,yaml]
+----
+name: Check links
+on: [push, pull_request]
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install adoc-link-checker
+      - run: adoc-link-checker ./docs --output broken_links.json
+      - name: Fail if broken links
+        if: ${{ failure() }}
+        run: exit 1
+----
+
+=== Exemple avec GitLab CI
+Ajoutez une étape à votre `.gitlab-ci.yml` :
+[source,yaml]
+----
+check_links:
+  script:
+    - pip install adoc-link-checker
+    - adoc-link-checker ./docs --output broken_links.json
+----
+
+== 📊 Interprétation des résultats
+| Code d’erreur | Signification |
+|---------------|---------------|
+| `404` | Page non trouvée. |
+| `403` | Accès interdit. |
+| `Timeout` | La requête a expiré. |
+| `DNS resolution failed` | Le domaine n’existe pas. |
+| `Redirected to ...` | L’URL a été redirigée (peut être normal). |
+
+== 💡 Bonnes pratiques
+- **Exclure les liens dynamiques** : Ajoutez les URLs générées dynamiquement (ex: liens de login) à `exclude_urls.txt`.
+- **Limiter le nombre de threads** : Utilisez `--max-workers 5` pour éviter les bans IP.
+- **Vérifier régulièrement** : Intégrez le checker dans votre pipeline CI pour une détection précoce.
+
+== ❓ FAQ
+[qanda]
+Quelle est la différence entre `--blacklist` et `--exclude-from`?::
+`--blacklist` ignore tous les liens contenant un domaine spécifique, tandis que `--exclude-from` ignore uniquement les URLs listées dans le fichier.
+
+Puis-je vérifier des liens locaux (ex: `link:autre-page.adoc`)?::
+Non, la version actuelle ne vérifie que les liens HTTP/HTTPS. Cette fonctionnalité est prévue pour une prochaine version.
+
+Comment gérer les redirections?::
+Les redirections (3xx) sont suivies automatiquement. Utilisez `-vv` pour voir la chaîne de redirection.

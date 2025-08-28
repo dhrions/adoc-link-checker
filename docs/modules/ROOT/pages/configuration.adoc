@@ -1,0 +1,104 @@
+= Configuration avancée
+:page-description: Personnalisez le comportement d'Adoc Link Checker avec des options avancées.
+:icons: font
+:source-highlighter: pygments
+
+== ⚙️ Options de configuration
+
+=== Options globales
+[cols="1,2,1,1"]
+|===
+| Option | Description | Valeur par défaut | Exemple
+
+| `--timeout` | Timeout pour les requêtes HTTP (secondes). | `15` | `--timeout 30`
+| `--max-workers` | Nombre maximal de threads pour le traitement parallèle. | `5` | `--max-workers 10`
+| `--delay` | Délai entre chaque requête (secondes). | `0.5` | `--delay 1.0`
+| `--output` | Fichier de sortie pour les liens brisés (JSON). | `broken_links.json` | `--output rapport.json`
+| `--blacklist` | Domaine à ignorer (peut être spécifié plusieurs fois). | `[]` | `--blacklist "spam.com"`
+| `--exclude-from` | Fichier contenant la liste des liens à exclure. | - | `--exclude-from exclude_urls.txt`
+| `-v, --verbose` | Augmente la verbosité (INFO avec `-v`, DEBUG avec `-vv`). | - | `-vv`
+| `--quiet` | Désactive les logs sauf les erreurs. | - | `--quiet`
+| `--log-file` | Fichier pour enregistrer les logs. | - | `--log-file logs/checker.log`
+|===
+
+=== Configuration via variables d’environnement
+
+Vous pouvez définir des valeurs par défaut via des variables d’environnement :
+[source,bash]
+----
+export ADOC_LINK_CHECKER_TIMEOUT=20
+export ADOC_LINK_CHECKER_MAX_WORKERS=8
+adoc-link-checker ./docs  # Utilisera les valeurs ci-dessus
+----
+
+=== Fichier de configuration (expérimental)
+
+Créez un fichier `.adoc-link-checker.yml` dans votre projet :
+[source,yaml]
+----
+timeout: 20
+max_workers: 8
+blacklist:
+  - "spam.com"
+  - "ads.example"
+exclude_from: "exclude_urls.txt"
+output: "rapport.json"
+----
+*Cette fonctionnalité sera implémentée dans la v1.1.0.*
+
+== 📝 Fichier d’exclusion
+
+Le fichier `exclude_urls.txt` permet d’ignorer des liens spécifiques. Exemple :
+----
+# Ignorer les liens de développement
+https://dev.exemple.com/*
+# Ignorer une URL spécifique
+https://exemple.com/lien-temporaire
+----
+
+=== Syntaxe avancée
+
+- **Jokers** : Utilisez `*` pour ignorer un ensemble d’URLs :
+----
+https://exemple.com/api/*
+----
+- **Commentaires** : Les lignes commençant par `#` sont ignorées.
+
+== 🔧 Personnalisation des requêtes HTTP
+
+=== User-Agent personnalisé
+Par défaut, Adoc Link Checker utilise :
+----
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36
+----
+Pour le modifier, utilisez la variable `ADOC_LINK_CHECKER_USER_AGENT` :
+[source,bash]
+----
+export ADOC_LINK_CHECKER_USER_AGENT="MonBot/1.0"
+adoc-link-checker ./docs
+----
+
+=== Gestion des redirections
+Les redirections HTTP (3xx) sont suivies automatiquement. Pour désactiver ce comportement, modifiez le code source (`config.py`) :
+[source,python]
+----
+RETRY_CONFIG = {
+    "total": 3,
+    "backoff_factor": 1,
+    "status_forcelist": [500, 502, 503, 504],
+    "redirect": False  # Désactive le suivi des redirections
+}
+----
+
+=== Retries et backoff
+La configuration des retries est définie dans `config.py` :
+[source,python]
+----
+RETRY_CONFIG = {
+    "total": 3,          # Nombre maximal de retries
+    "backoff_factor": 1, # Délai entre les retries (exponentiel)
+    "status_forcelist": [500, 502, 503, 504]  # Codes HTTP pour lesquels retry
+}
+----
+
+== 📁 Structure recommandée
