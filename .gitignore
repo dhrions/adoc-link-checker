@@ -3,3 +3,4 @@ digest.txt
 build/
 __pycache__
 adoc_link_checker.egg-info
+broken_links.json
