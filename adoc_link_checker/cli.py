@@ -68,7 +68,8 @@ from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUT
 @click.version_option(version="1.0.0")
 def cli(root_dir, timeout, max_workers, delay, output, blacklist, exclude_from, verbose, quiet, log_file):
     """Check broken links in .adoc files"""
-    # Configuration du niveau de log selon la verbosité
+    # Configuration of level log
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
     if quiet:
         LOGGING_CONFIG["level"] = logging.ERROR
     elif verbose == 1:  # -v
