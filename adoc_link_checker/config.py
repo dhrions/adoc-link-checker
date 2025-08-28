@@ -1,7 +1,6 @@
 import logging
 
 # Configuration centrale du script
-ROOT_DIR = "../main/modules"          # Répertoire racine à scanner
 TIMEOUT = 15                          # Timeout pour les requêtes HTTP (secondes)
 MAX_WORKERS = 5                       # Nombre maximal de threads pour le traitement parallèle
 DELAY = 0.5                           # Délai entre chaque requête (secondes)
