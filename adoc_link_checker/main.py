@@ -21,7 +21,7 @@ def is_valid_url(url: str) -> bool:
     try:
         result = urlparse(url)
         valid = all([result.scheme in ('http', 'https'), result.netloc])
-        logger.debug(f"DEBUG: URL {url} est valide ? {valid}")  # Debug
+        logger.debug(f"URL {url} est valide ? {valid}")  # Debug
         return valid
     except ValueError:
         return False
@@ -64,7 +64,7 @@ def extract_links_from_file(file_path: str) -> set:
                 if pattern == LINK_PATTERNS[1]:  # video::youtube_id
                     youtube_id = match.group(1)
                     url = youtube_id_to_url(youtube_id)
-                    logger.debug(f"DEBUG: YouTube ID={youtube_id}, URL={url}")  # Débogage
+                    logger.debug(f"YouTube ID={youtube_id}, URL={url}")  # Débogage
                 else:
                     url = match.group(0).replace('link:', '')
                     url = normalize_url(url)

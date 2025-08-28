@@ -70,7 +70,7 @@ def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose, exclu
         blacklist=BLACKLIST + list(blacklist),
         exclude_from=exclude_from
     )
-    logger.debug(f"DEBUG: Fichier de sortie : {os.path.abspath(output)}")  # Debug
+    logger.debug(f"Fichier de sortie : {os.path.abspath(output)}")  # Debug
 
 if __name__ == "__main__":
     cli()

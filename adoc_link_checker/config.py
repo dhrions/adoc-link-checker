@@ -5,7 +5,7 @@ TIMEOUT = 15                          # Timeout pour les requêtes HTTP (seconde
 MAX_WORKERS = 5                       # Nombre maximal de threads pour le traitement parallèle
 DELAY = 0.5                           # Délai entre chaque requête (secondes)
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-BLACKLIST = []                        # Liste des domaines à ignorer (ex: ["spam.com", "ads.example"])
+BLACKLIST = ["lien-brise.com","autre-lien.com"]                        # Liste des domaines à ignorer (ex: ["spam.com", "ads.example"])
 
 # Patterns pour l'extraction des liens
 LINK_PATTERNS = [
