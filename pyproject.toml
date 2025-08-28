@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "adoc-link-checker"
-version = "1.0.0"
+version = "0.1.0"
 authors = [{ name = "dhrions", email = "ton@email.com" }]
 description = "Outil pour vérifier les liens brisés dans les fichiers AsciiDoc."
 readme = "README.md"
