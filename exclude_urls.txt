@@ -5,3 +5,4 @@ https://dev.exemple.com
 https://exemple.com/lien-temporaire
 https://exemple.com/api
 https://github.com/ton-org/adoc-link-checker/blob/main/LICENSE
+https://autre-exemple.com/ignorer
