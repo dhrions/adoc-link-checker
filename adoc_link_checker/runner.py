@@ -21,7 +21,7 @@ def is_valid_url(url: str) -> bool:
     try:
         result = urlparse(url)
         valid = all([result.scheme in ('http', 'https'), result.netloc])
-        logger.debug(f"URL {url} est valide ? {valid}")
+        # logger.debug(f"URL {url} est valide ? {valid}")
         return valid
     except ValueError:
         return False
@@ -29,7 +29,7 @@ def is_valid_url(url: str) -> bool:
 def is_blacklisted(url: str, blacklist: list) -> bool:
     """Vérifie si une URL est dans la blacklist."""
     blacklisted = any(domain in url for domain in blacklist)
-    logger.debug(f"URL {url} est blacklistée ? {blacklisted}")
+    # logger.debug(f"URL {url} est blacklistée ? {blacklisted}")
     return blacklisted
 
 def normalize_url(url: str) -> str:
@@ -99,7 +99,7 @@ def process_file(session: requests.Session, file_path: str, delay: float, timeou
     """Traite un fichier .adoc pour vérifier ses liens."""
     broken_links = []
     links = extract_links_from_file(file_path)
-    logger.info(f"📂 Processing {file_path} ({len(links)} URLs to check)...")
+    logger.debug(f"📂 Processing {file_path} ({len(links)} URLs to check)...")
 
     # Filtrer les URLs exclues
     links = [url for url in links if url not in excluded_urls]
@@ -110,7 +110,7 @@ def process_file(session: requests.Session, file_path: str, delay: float, timeou
             logger.warning(f"  ❌ Broken URL: {url}")
             broken_links.append((url, "URL not accessible"))
         else:
-            logger.info(f"  ✅ URL checked: {url}")
+            logger.debug(f"  ✅ URL checked: {url}")
     return broken_links
 
 def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, output_file: str, blacklist: list, exclude_from: str) -> None:
