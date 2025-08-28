@@ -77,7 +77,7 @@ def cli(root_dir, timeout, max_workers, delay, output, blacklist, exclude_from, 
     elif verbose >= 2:  # -vv ou plus
         LOGGING_CONFIG["level"] = logging.DEBUG
     else:  # Par défaut
-        LOGGING_CONFIG["level"] = logging.WARNING
+        LOGGING_CONFIG["level"] = logging.INFO
     logging.basicConfig(level=LOGGING_CONFIG["level"], format=LOGGING_CONFIG["format"], force=True)
     logger = logging.getLogger(__name__)
     logger.info(f"🔍 Begin check in {os.path.abspath(root_dir)}")
