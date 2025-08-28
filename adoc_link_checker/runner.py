@@ -124,7 +124,7 @@ def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, outpu
     else:
         logger.info("❌ Broken URLs found:")
         for file, links in broken_links.items():
-            logger.info(f"\n📄 {file}")
+            logger.info(f"\n📄 {os.path.abspath(file)}")
             for url, reason in links:
                 logger.info(f"  🔗 {url} ({reason})")
 
