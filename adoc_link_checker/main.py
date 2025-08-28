@@ -16,21 +16,30 @@ from adoc_link_checker.config import (
 
 logger = logging.getLogger(__name__)
 
+
 def is_valid_url(url: str) -> bool:
     try:
         result = urlparse(url)
-        return all([result.scheme in ('http', 'https'), result.netloc])
+        valid = all([result.scheme in ('http', 'https'), result.netloc])
+        logger.debug(f"DEBUG: URL {url} est valide ? {valid}")  # Debug
+        return valid
     except ValueError:
         return False
 
+
 def is_blacklisted(url: str, blacklist: list) -> bool:
-    return any(domain in url for domain in blacklist)
+    blacklisted = any(domain in url for domain in blacklist)
+    logger.debug(f"URL {url} est blacklistée ? {blacklisted}")
+    return blacklisted
+
 
 def normalize_url(url: str) -> str:
     return url.split('#')[0].split('?')[0].strip('"\'<>').rstrip('/')
 
+
 def youtube_id_to_url(youtube_id: str) -> str:
     return f"https://www.youtube.com/watch?v={youtube_id}"
+
 
 @lru_cache(maxsize=1024)
 def check_url(session: requests.Session, url: str, timeout: int) -> bool:
@@ -44,10 +53,13 @@ def check_url(session: requests.Session, url: str, timeout: int) -> bool:
         logger.warning(f"⚠️ {url} failed: {str(e)}")
         return False
 
+
 def extract_links_from_file(file_path: str) -> set:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
+        logger.debug(
+            f"DEBUG: Contenu du fichier {file_path}:\n{content}")  # Debug
         links = set()
         for pattern in LINK_PATTERNS:
             for match in re.finditer(pattern, content):
@@ -59,11 +71,13 @@ def extract_links_from_file(file_path: str) -> set:
                 url = normalize_url(url)
                 if is_valid_url(url):
                     links.add(url)
-                    logger.debug(f"Found URL: {url} (from {file_path})")
+                    logger.debug(f"DEBUG: Lien extrait : {url}")  # Debug
         return links
     except Exception as e:
-        logger.error(f"Could not read {file_path}: {e}")
+        logger.debug(
+            f"DEBUG: Erreur lors de la lecture de {file_path}: {e}")  # Debug
         return set()
+
 
 def process_file(session: requests.Session, file_path: str, delay: float, timeout: int) -> list:
     broken_links = []
@@ -76,6 +90,7 @@ def process_file(session: requests.Session, file_path: str, delay: float, timeou
             broken_links.append((url, "URL not accessible"))
         logger.info(f"✅ {file_path} ({len(links)} URL checked with success)!")
     return broken_links
+
 
 def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, output_file: str, blacklist: list) -> None:
     broken_links = {}
@@ -91,7 +106,8 @@ def run_check(root_dir: str, max_workers: int, delay: float, timeout: int, outpu
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.headers.update({"User-Agent": USER_AGENT})
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(process_file, session, file, delay, timeout): file for file in adoc_files}
+        futures = {executor.submit(
+            process_file, session, file, delay, timeout): file for file in adoc_files}
         for future in as_completed(futures):
             file = futures[future]
             try:

@@ -63,6 +63,7 @@ def cli(root_dir, timeout, max_workers, delay, output, blacklist, verbose):
         output_file=output,
         blacklist=BLACKLIST + list(blacklist),
     )
+    logger.debug(f"DEBUG: Fichier de sortie : {os.path.abspath(output)}")  # Debug
 
 if __name__ == "__main__":
     cli()
