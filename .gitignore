@@ -6,3 +6,5 @@ adoc_link_checker.egg-info
 broken_links.json
 .coverage
 report.json
+*.whl
+*.tar.gz
