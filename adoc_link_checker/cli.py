@@ -1,27 +1,40 @@
 import click
 import logging
 import os
-from adoc_link_checker.runner import run_check
-from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUTPUT_FILE, LOGGING_CONFIG
 
-@click.command()
+from adoc_link_checker.runner import run_check
+from adoc_link_checker.config import (
+    TIMEOUT,
+    MAX_WORKERS,
+    DELAY,
+    BLACKLIST,
+    LOGGING_CONFIG,
+)
+
+
+@click.group()
+@click.version_option(version="1.0.0")
+def cli():
+    """AdocX – AsciiDoc utilities."""
+    pass
+
+
+@cli.command("check-links")
 @click.argument(
-    "root_dir",
-    type=click.Path(exists=True, file_okay=False),
-    default=".",
-    required=False,
+    "path",
+    type=click.Path(exists=True, file_okay=True, dir_okay=True),
 )
 @click.option(
     "--timeout",
     type=int,
     default=TIMEOUT,
-    help=f"Timeout for HTTPs requests (seconds). [Default: {TIMEOUT}]",
+    help=f"Timeout for HTTP requests (seconds). [Default: {TIMEOUT}]",
 )
 @click.option(
     "--max-workers",
     type=int,
     default=MAX_WORKERS,
-    help=f"Maximal number of threads for parallel processing [Default: {MAX_WORKERS}]",
+    help=f"Maximum number of threads. [Default: {MAX_WORKERS}]",
 )
 @click.option(
     "--delay",
@@ -31,9 +44,9 @@ from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUT
 )
 @click.option(
     "--output",
-    type=click.Path(),
-    default=OUTPUT_FILE,
-    help=f"JSON ouput file for broken links. [Default: {OUTPUT_FILE}]",
+    type=click.Path(dir_okay=False, writable=True),
+    required=True,
+    help="JSON output file for broken links (required).",
 )
 @click.option(
     "--blacklist",
@@ -46,51 +59,65 @@ from adoc_link_checker.config import TIMEOUT, MAX_WORKERS, DELAY, BLACKLIST, OUT
     "--exclude-from",
     type=click.Path(exists=True, dir_okay=False),
     default=None,
-    help="File with list of links to exclude (a link by line).",
+    help="File with list of links to exclude.",
 )
 @click.option(
     "-v",
     "--verbose",
-    count=True,  # Permet de compter le nombre de fois que -v est utilisé
-    help="Augmente la verbosité (INFO avec -v, DEBUG avec -vv).",
+    count=True,
+    help="Increase verbosity (-v = INFO, -vv = DEBUG).",
 )
 @click.option(
     "--quiet",
     is_flag=True,
-    help="Désactive les logs sauf les erreurs (niveau ERROR).",
+    help="Disable logs except errors.",
 )
-@click.option(
-    "--log-file",
-    type=click.Path(),
-    default=None,
-    help="Fichier pour enregistrer les logs (en plus de la console).",
-)
-@click.version_option(version="1.0.0")
-def cli(root_dir, timeout, max_workers, delay, output, blacklist, exclude_from, verbose, quiet, log_file):
-    """Check broken links in .adoc files"""
-    # Configuration of level log
+def check_links(
+    path,
+    timeout,
+    max_workers,
+    delay,
+    output,
+    blacklist,
+    exclude_from,
+    verbose,
+    quiet,
+):
+    """Check broken links in AsciiDoc files."""
+
+    # Logging configuration
     logging.getLogger("urllib3").setLevel(logging.WARNING)
+
     if quiet:
         LOGGING_CONFIG["level"] = logging.ERROR
-    elif verbose == 1:  # -v
+    elif verbose == 1:
         LOGGING_CONFIG["level"] = logging.INFO
-    elif verbose >= 2:  # -vv ou plus
+    elif verbose >= 2:
         LOGGING_CONFIG["level"] = logging.DEBUG
-    else:  # Par défaut
+    else:
         LOGGING_CONFIG["level"] = logging.INFO
-    logging.basicConfig(level=LOGGING_CONFIG["level"], format=LOGGING_CONFIG["format"], force=True)
+
+    logging.basicConfig(
+        level=LOGGING_CONFIG["level"],
+        format=LOGGING_CONFIG["format"],
+        force=True,
+    )
+
     logger = logging.getLogger(__name__)
-    logger.info(f"🔍 Begin check in {os.path.abspath(root_dir)}")
+
+    abs_path = os.path.abspath(path)
+    logger.info(f"🔍 Checking links in {abs_path}")
+
     run_check(
-        root_dir=root_dir,
+        root_path=abs_path,
         max_workers=max_workers,
         delay=delay,
         timeout=timeout,
         output_file=output,
         blacklist=BLACKLIST + list(blacklist),
-        exclude_from=exclude_from
+        exclude_from=exclude_from,
     )
-    logger.debug(f"Output file : {os.path.abspath(output)}")  # Debug
+
 
 if __name__ == "__main__":
     cli()
