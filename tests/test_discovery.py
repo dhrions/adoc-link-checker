@@ -15,5 +15,6 @@ def test_find_adoc_files_in_directory(tmp_path):
     (tmp_path / "c.txt").write_text("nope")
 
     files = find_adoc_files(str(tmp_path))
+
     assert len(files) == 2
     assert all(f.endswith(".adoc") for f in files)

@@ -1,5 +1,4 @@
 import responses
-import requests
 
 from adoc_link_checker.checker import check_url, create_session
 
@@ -8,11 +7,7 @@ from adoc_link_checker.checker import check_url, create_session
 def test_check_url_head_ok():
     url = "https://example.com"
 
-    responses.add(
-        responses.HEAD,
-        url,
-        status=200,
-    )
+    responses.add(responses.HEAD, url, status=200)
 
     session = create_session()
     assert check_url(session, url, timeout=5, blacklist=()) is True
