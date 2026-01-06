@@ -1,6 +1,7 @@
 import click
 import logging
 import os
+from importlib.metadata import version, PackageNotFoundError
 
 from adoc_link_checker.runner import run_check
 from adoc_link_checker.config import (
@@ -11,12 +12,19 @@ from adoc_link_checker.config import (
     LOGGING_CONFIG,
 )
 
+def get_version():
+    try:
+        return version("adoc-link-checker")
+    except PackageNotFoundError:
+        return "unknown"
+
 
 @click.group()
-@click.version_option(version="1.0.0")
+@click.version_option(version=get_version())
 def cli():
     """AdocX – AsciiDoc utilities."""
     pass
+
 
 
 @cli.command("check-links")
