@@ -1,5 +1,7 @@
 import logging
 
+from adoc_link_checker.utils.url import normalize_url
+
 logger = logging.getLogger(__name__)
 
 
@@ -11,7 +13,7 @@ def load_excluded_urls(exclude_from: str | None) -> set[str]:
     - one URL per line
     - empty lines ignored
     - lines starting with '#' ignored
-    - trailing slashes removed
+    - URLs are normalized for consistent comparison
     """
     if not exclude_from:
         return set()
@@ -19,7 +21,7 @@ def load_excluded_urls(exclude_from: str | None) -> set[str]:
     try:
         with open(exclude_from, "r", encoding="utf-8") as f:
             return {
-                line.strip().rstrip("/")
+                normalize_url(line.strip())
                 for line in f
                 if line.strip() and not line.strip().startswith("#")
             }
