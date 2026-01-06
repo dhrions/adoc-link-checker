@@ -23,9 +23,20 @@ def is_blacklisted(url: str, blacklist: list) -> bool:
 
 
 def normalize_url(url: str) -> str:
-    """Normalise une URL en supprimant les fragments, queries et caractères superflus."""
-    url = url.split('#')[0].split('?')[0].strip('"\'<>').rstrip('/')
+    """
+    Normalize a URL by removing fragments, queries,
+    surrounding quotes, trailing slashes and punctuation.
+    """
+    url = url.split("#")[0].split("?")[0].strip('"\'<>')
+
+    # Remove common trailing punctuation from prose
+    url = url.rstrip(".,;:!?)[]")
+
+    # Remove trailing slash (optional, but consistent)
+    url = url.rstrip("/")
+
     return url
+
 
 
 def youtube_id_to_url(youtube_id: str) -> str:
