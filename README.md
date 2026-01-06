@@ -1,147 +1,172 @@
 # Adoc Link Checker (adocx)
 
-Adoc Link Checker est un outil en ligne de commande permettant de détecter automatiquement les liens HTTP et HTTPS brisés dans des fichiers AsciiDoc (.adoc).
+Adoc Link Checker is a command-line tool to detect broken HTTP and HTTPS links
+in AsciiDoc (.adoc) files.
 
-Il est conçu pour être :
-
-* fiable (requête HEAD avec fallback GET),
-* rapide (traitement parallèle),
-* explicite (rapport JSON, aucune sortie implicite),
-* facilement intégrable en CI/CD.
+It is designed to be:
+- reliable (HEAD request with GET fallback),
+- fast (parallel processing with caching),
+- explicit (JSON report, no implicit output),
+- CI-friendly.
 
 ---
 
-## Fonctionnalités
+## Features
 
-* Vérification des liens HTTP et HTTPS
-* Support des IDs YouTube (video::ID[])
-* Traitement parallèle configurable
-* Exclusion de liens ou de domaines
-* Rapport JSON structuré
-* Analyse d’un fichier ou d’un dossier
-* Cache des résultats pour éviter les requêtes redondantes
+- Checks HTTP and HTTPS links
+- Supports YouTube IDs (video::ID[])
+- Parallel processing (configurable)
+- URL and domain exclusion
+- Structured JSON report
+- Works on a single file or a directory
+- Built-in request caching
+- Suitable for CI pipelines
 
 ---
 
 ## Installation
 
-### Prérequis
+### Requirements
+- Python 3.8+
+- pip
 
-* Python 3.8 ou supérieur
-* pip
-
-### Installation depuis PyPI
+### Install from PyPI
 
 pip install adoc-link-checker
 
-La commande suivante devient disponible :
+This installs the CLI command:
 
 adocx
 
 ---
 
-## Utilisation rapide
+## Quick usage
 
-### Vérifier un fichier AsciiDoc
+### Check a single AsciiDoc file
 
 adocx check-links README.adoc --output report.json
 
-### Vérifier un dossier
+### Check a directory
 
 adocx check-links ./docs --output report.json
 
----
-
-## Options principales
-
-| Option         | Description                         | Défaut      |
-| -------------- | ----------------------------------- | ----------- |
-| FILE_OR_DIR    | Fichier .adoc ou dossier à analyser | obligatoire |
-| --output       | Fichier JSON de sortie              | obligatoire |
-| --timeout      | Timeout HTTP en secondes            | 15          |
-| --max-workers  | Nombre de threads                   | 5           |
-| --delay        | Délai entre requêtes en secondes    | 0.5         |
-| --blacklist    | Domaine à ignorer, répétable        | aucun       |
-| --exclude-from | Fichier de liens à exclure          | aucun       |
-| -v ou -vv      | Verbosité INFO ou DEBUG             | aucun       |
-| --quiet        | Logs erreurs uniquement             | désactivé   |
+WARNING:
+The --output option is mandatory.
+No report is generated without it.
 
 ---
 
-## Fichier d’exclusion
+## Main options
 
-Un fichier d’exclusion permet d’ignorer certaines URLs.
+FILE_OR_DIR
+    .adoc file or directory to scan (required)
 
-Exemple de contenu :
+--output
+    JSON output file (required)
 
-# Commentaires autorisés
+--timeout
+    HTTP timeout in seconds (default: 15)
 
-[https://example.com/temp](https://example.com/temp)
-[https://dev.example.com](https://dev.example.com)
+--max-workers
+    Number of parallel threads (default: 5)
 
-Utilisation :
+--delay
+    Delay between requests in seconds (default: 0.5)
+
+--blacklist
+    Domain to ignore (repeatable)
+
+--exclude-from
+    File containing URLs to exclude
+
+--fail-on-broken
+    Exit with non-zero status code if broken links are found
+
+-v / -vv
+    Verbosity (INFO / DEBUG)
+
+--quiet
+    Errors only
+
+---
+
+## Excluding URLs
+
+You can exclude specific URLs using a text file.
+
+Example exclude_urls.txt:
+
+# Comments are allowed
+https://example.com/temp
+https://dev.example.com
+
+Usage:
 
 adocx check-links ./docs --exclude-from exclude_urls.txt --output report.json
 
+Rules:
+- one URL per line
+- empty lines are ignored
+- lines starting with # are ignored
+- URLs are normalized automatically
+
 ---
 
-## Format du rapport JSON
+## JSON report format
 
-Le rapport contient uniquement les fichiers ayant des liens cassés.
+Only files containing broken links appear in the report.
 
-Exemple :
+Example:
 
 {
-"docs/page.adoc": [
-["[https://example.com/broken](https://example.com/broken)", "URL not accessible"]
-]
+  "docs/page.adoc": [
+    ["https://example.com/broken", "URL not accessible"]
+  ]
 }
 
 ---
 
-## Comportement HTTP
+## HTTP behavior
 
-* Requête HEAD prioritaire
-* Fallback automatique vers GET
-* Redirections suivies
-* User-Agent réaliste
-* Retries automatiques sur erreurs serveur
-
----
-
-## Utilisation en CI
-
-Exemple avec GitHub Actions :
-
-* name: Check AsciiDoc links
-  run: adocx check-links ./docs --output broken_links.json
-
-Le code retour est toujours 0 même si des liens sont cassés.
-Une option fail-on-broken est prévue.
+- HEAD request first
+- Automatic fallback to GET
+- Redirects followed
+- Realistic User-Agent
+- Automatic retries on server errors
+- Shared cache to avoid duplicate requests
 
 ---
 
-## Développement
+## CI usage
 
-Installation en mode editable :
+Typical usage in CI pipelines:
 
-git clone [https://github.com/ton-org/adoc-link-checker.git](https://github.com/ton-org/adoc-link-checker.git)
+adocx check-links ./docs --output broken_links.json --fail-on-broken
+
+Exit codes:
+- 0: no broken links
+- 1: broken links detected
+
+---
+
+## Development
+
+Clone the repository:
+
+git clone https://github.com/dhrions/adoc-link-checker.git
 cd adoc-link-checker
+
+Install in editable mode:
+
 pip install -e .[dev]
 
-Lancer les tests :
+Run tests:
 
-pytest
-
----
-
-## Licence
-
-Ce projet est sous licence MIT.
-Voir le fichier LICENSE à la racine du dépôt.
+pytest --cov=.
 
 ---
 
-## Commande CLI
+## License
 
-Note : la commande CLI fournie par ce projet est adocx.
+This project is licensed under the MIT License.
+See the LICENSE file for details.
