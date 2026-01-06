@@ -1,7 +1,7 @@
 # Adoc Link Checker (adocx)
 
 Adoc Link Checker is a command-line tool to detect broken HTTP and HTTPS links
-in AsciiDoc (.adoc) files.
+in AsciiDoc (`.adoc`) files.
 
 It is designed to be:
 - reliable (HEAD request with GET fallback),
@@ -11,10 +11,19 @@ It is designed to be:
 
 ---
 
+## Why Adoc Link Checker?
+
+- AsciiDoc / Antora projects often contain hundreds of external links
+- Broken links silently degrade documentation quality
+- CI pipelines rarely validate link integrity
+- This tool provides a deterministic, cache-aware, CI-friendly solution
+
+---
+
 ## Features
 
 - Checks HTTP and HTTPS links
-- Supports YouTube IDs (video::ID[])
+- Supports YouTube IDs (`video::ID[]`)
 - Parallel processing (configurable)
 - URL and domain exclusion
 - Structured JSON report
@@ -32,11 +41,15 @@ It is designed to be:
 
 ### Install from PyPI
 
+```bash
 pip install adoc-link-checker
+```
 
 This installs the CLI command:
 
+```bash
 adocx
+```
 
 ---
 
@@ -44,20 +57,25 @@ adocx
 
 ### Check a single AsciiDoc file
 
+```bash
 adocx check-links README.adoc --output report.json
+```
 
 ### Check a directory
 
+```bash
 adocx check-links ./docs --output report.json
+```
 
-WARNING:
-The --output option is mandatory.
+⚠️ **WARNING**  
+The `--output` option is mandatory.  
 No report is generated without it.
 
 ---
 
 ## Main options
 
+```
 FILE_OR_DIR
     .adoc file or directory to scan (required)
 
@@ -87,6 +105,7 @@ FILE_OR_DIR
 
 --quiet
     Errors only
+```
 
 ---
 
@@ -94,20 +113,24 @@ FILE_OR_DIR
 
 You can exclude specific URLs using a text file.
 
-Example exclude_urls.txt:
+Example `exclude_urls.txt`:
 
+```
 # Comments are allowed
 https://example.com/temp
 https://dev.example.com
+```
 
 Usage:
 
+```bash
 adocx check-links ./docs --exclude-from exclude_urls.txt --output report.json
+```
 
 Rules:
 - one URL per line
 - empty lines are ignored
-- lines starting with # are ignored
+- lines starting with `#` are ignored
 - URLs are normalized automatically
 
 ---
@@ -118,11 +141,13 @@ Only files containing broken links appear in the report.
 
 Example:
 
+```json
 {
   "docs/page.adoc": [
     ["https://example.com/broken", "URL not accessible"]
   ]
 }
+```
 
 ---
 
@@ -141,11 +166,18 @@ Example:
 
 Typical usage in CI pipelines:
 
+```bash
 adocx check-links ./docs --output broken_links.json --fail-on-broken
+```
 
 Exit codes:
-- 0: no broken links
-- 1: broken links detected
+- `0`: no broken links
+- `1`: broken links detected
+
+Designed for CI:
+- deterministic JSON output
+- no implicit stdout noise
+- configurable failure behavior
 
 ---
 
@@ -153,20 +185,26 @@ Exit codes:
 
 Clone the repository:
 
+```bash
 git clone https://github.com/dhrions/adoc-link-checker.git
 cd adoc-link-checker
+```
 
 Install in editable mode:
 
+```bash
 pip install -e .[dev]
+```
 
 Run tests:
 
+```bash
 pytest --cov=.
+```
 
 ---
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License.  
 See the LICENSE file for details.
