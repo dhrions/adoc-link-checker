@@ -38,6 +38,22 @@ def normalize_url(url: str) -> str:
     return url
 
 
+def is_blacklisted(url: str, blacklist: list[str]) -> bool:
+    """
+    Return True if the URL's domain matches a blacklisted domain.
+    """
+    try:
+        netloc = urlparse(url).netloc.lower()
+    except ValueError:
+        return False
+
+    for domain in blacklist:
+        domain = domain.lower()
+        if netloc == domain or netloc.endswith("." + domain):
+            return True
+
+    return False
+
 
 def youtube_id_to_url(youtube_id: str) -> str:
     """Convertit un ID YouTube en URL complète."""
