@@ -50,7 +50,7 @@ https://autre-exemple.com/ignorer
 
 [source,bash]
 ----
-adoc-link-checker ./docs \
+adocx check-links ./docs \
   --max-workers 10 \
   --timeout 20 \
   --exclude-from exclude_urls.txt \
