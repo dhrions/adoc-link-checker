@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 def process_file(
-    session,
     file_path: str,
     delay: float,
     timeout: int,
@@ -20,7 +19,9 @@ def process_file(
 ) -> list:
     """
     Process a single .adoc file and return its broken links.
+    A dedicated HTTP session is created per thread (thread-safe).
     """
+    session = create_session()
     broken_links = []
 
     links = extract_links(file_path)
@@ -75,17 +76,13 @@ def run_check(
 
     logger.info(f"📋 Excluded URLs loaded: {len(excluded_urls)}")
 
-    # 3️⃣ Create shared HTTP session
-    session = create_session()
-
     broken_links: dict[str, list] = {}
 
-    # 4️⃣ Parallel processing
+    # 3️⃣ Parallel processing (one HTTP session per thread)
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
             executor.submit(
                 process_file,
-                session,
                 file,
                 delay,
                 timeout,
@@ -104,10 +101,10 @@ def run_check(
             except Exception as e:
                 logger.error(f"Error processing {file}: {e}")
 
-    # 5️⃣ Write report
+    # 4️⃣ Write report
     write_report(output_file, broken_links)
 
-    # 6️⃣ Final status
+    # 5️⃣ Final status
     if broken_links:
         logger.info("❌ Broken URLs found")
     else:
