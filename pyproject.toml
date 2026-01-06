@@ -1,6 +1,6 @@
 [project]
 name = "adoc-link-checker"
-version = "0.2.1"
+version = "0.2.2"
 description = "CLI tool to detect broken HTTP/HTTPS links in AsciiDoc files"
 readme = "README.md"
 license = { text = "MIT" }
@@ -12,9 +12,6 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Environment :: Console",
