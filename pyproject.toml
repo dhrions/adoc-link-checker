@@ -20,4 +20,5 @@ dev = [
 ]
 
 [project.scripts]
-adocx = "adoc_link_checker.cli:cli"
+adocx = "adoc_link_checker.cli.main:cli"
+

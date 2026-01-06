@@ -1,4 +1,4 @@
-from adoc_link_checker.url_utils import is_blacklisted
+from adoc_link_checker.utils.url import is_blacklisted
 
 
 def test_blacklist_false_positive_substring():

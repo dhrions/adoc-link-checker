@@ -2,7 +2,7 @@ import re
 import logging
 
 from adoc_link_checker.config import LINK_PATTERNS
-from adoc_link_checker.url_utils import (
+from adoc_link_checker.utils.url import (
     is_valid_url,
     normalize_url,
     youtube_id_to_url,

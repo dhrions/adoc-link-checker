@@ -1,4 +1,4 @@
-from adoc_link_checker.extractor import extract_links
+from adoc_link_checker.core.extractor import extract_links
 
 
 def test_extract_http_links(tmp_path):

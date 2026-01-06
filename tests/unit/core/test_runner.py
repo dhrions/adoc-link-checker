@@ -1,11 +1,11 @@
 from unittest.mock import patch
 
-from adoc_link_checker.runner import run_check
+from adoc_link_checker.core.runner import run_check
 
 
-@patch("adoc_link_checker.runner.write_report")
-@patch("adoc_link_checker.runner.find_adoc_files")
-@patch("adoc_link_checker.runner.process_file")
+@patch("adoc_link_checker.core.runner.write_report")
+@patch("adoc_link_checker.core.runner.find_adoc_files")
+@patch("adoc_link_checker.core.runner.process_file")
 def test_run_check_happy_path(
     mock_process,
     mock_find,

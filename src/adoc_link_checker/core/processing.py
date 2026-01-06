@@ -1,10 +1,10 @@
 import time
 import logging
 
-from adoc_link_checker.extractor import extract_links
-from adoc_link_checker.checker import create_session
-from adoc_link_checker.context import LinkCheckContext
-from adoc_link_checker.link_checker import LinkChecker
+from adoc_link_checker.core.extractor import extract_links
+from adoc_link_checker.http.checker import create_session
+from adoc_link_checker.core.context import LinkCheckContext
+from adoc_link_checker.http.service import LinkChecker
 
 logger = logging.getLogger(__name__)
 

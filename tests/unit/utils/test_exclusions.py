@@ -1,7 +1,8 @@
-from adoc_link_checker.exclusions import load_excluded_urls
-from adoc_link_checker.extractor import extract_links
-from adoc_link_checker.processing import process_file
-from adoc_link_checker.context import LinkCheckContext
+from adoc_link_checker.utils.exclusions import load_excluded_urls
+from adoc_link_checker.core.extractor import extract_links
+from adoc_link_checker.core.processing import process_file
+from adoc_link_checker.core.context import LinkCheckContext
+
 
 from unittest.mock import patch
 
@@ -28,7 +29,7 @@ def test_excluded_url_with_trailing_slash_not_normalized(tmp_path):
     context = LinkCheckContext(timeout=5, blacklist=[])
 
     # --- Mock HTTP check to always fail ---
-    with patch("adoc_link_checker.processing.LinkChecker.check", return_value=False):
+    with patch("adoc_link_checker.core.processing.LinkChecker.check", return_value=False):
         broken_links = process_file(
             file_path=str(adoc_file),
             delay=0,

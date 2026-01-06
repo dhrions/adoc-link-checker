@@ -5,7 +5,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from adoc_link_checker.config import USER_AGENT, RETRY_CONFIG
-from adoc_link_checker.url_utils import is_blacklisted
+from adoc_link_checker.utils.url import is_blacklisted
 
 logger = logging.getLogger(__name__)
 

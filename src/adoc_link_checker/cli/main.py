@@ -3,7 +3,7 @@ import logging
 import os
 from importlib.metadata import version, PackageNotFoundError
 
-from adoc_link_checker.runner import run_check
+from adoc_link_checker.core.runner import run_check
 from adoc_link_checker.config import (
     TIMEOUT,
     MAX_WORKERS,

@@ -1,7 +1,7 @@
 import logging
 
-from adoc_link_checker.checker import check_url
-from adoc_link_checker.context import LinkCheckContext
+from adoc_link_checker.http.checker import check_url
+from adoc_link_checker.core.context import LinkCheckContext
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import responses
 
-from adoc_link_checker.checker import check_url, create_session
+from adoc_link_checker.http.checker import check_url, create_session
 
 
 @responses.activate

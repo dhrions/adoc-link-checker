@@ -1,4 +1,5 @@
-from adoc_link_checker.url_utils import normalize_url
+from adoc_link_checker.core.extractor import extract_links
+from adoc_link_checker.utils.url import normalize_url
 
 
 def test_normalize_url_trailing_dot():

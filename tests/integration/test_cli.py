@@ -33,7 +33,7 @@ def test_cli_requires_output(tmp_path):
     assert "--output" in result.output
 
 
-@patch("adoc_link_checker.cli.run_check")
+@patch("adoc_link_checker.cli.main.run_check")
 def test_cli_check_links_ok(mock_run, tmp_path):
     """
     Nominal execution with required arguments.
@@ -56,7 +56,7 @@ def test_cli_check_links_ok(mock_run, tmp_path):
     mock_run.assert_called_once()
 
 
-@patch("adoc_link_checker.cli.run_check")
+@patch("adoc_link_checker.cli.main.run_check")
 def test_cli_quiet_mode(mock_run, tmp_path):
     """
     --quiet branch.
@@ -80,7 +80,7 @@ def test_cli_quiet_mode(mock_run, tmp_path):
     mock_run.assert_called_once()
 
 
-@patch("adoc_link_checker.cli.run_check")
+@patch("adoc_link_checker.cli.main.run_check")
 def test_cli_verbose_info(mock_run, tmp_path):
     """
     -v branch (INFO).
@@ -104,7 +104,7 @@ def test_cli_verbose_info(mock_run, tmp_path):
     mock_run.assert_called_once()
 
 
-@patch("adoc_link_checker.cli.run_check")
+@patch("adoc_link_checker.cli.main.run_check")
 def test_cli_verbose_debug(mock_run, tmp_path):
     """
     -vv branch (DEBUG).
@@ -128,7 +128,7 @@ def test_cli_verbose_debug(mock_run, tmp_path):
     mock_run.assert_called_once()
 
 
-@patch("adoc_link_checker.cli.run_check")
+@patch("adoc_link_checker.cli.main.run_check")
 def test_cli_blacklist_and_exclude(mock_run, tmp_path):
     """
     --blacklist and --exclude-from branches.

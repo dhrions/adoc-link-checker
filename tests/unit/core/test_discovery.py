@@ -1,4 +1,4 @@
-from adoc_link_checker.discovery import find_adoc_files
+from adoc_link_checker.core.discovery import find_adoc_files
 
 
 def test_find_single_adoc_file(tmp_path):

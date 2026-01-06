@@ -1,11 +1,11 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from adoc_link_checker.discovery import find_adoc_files
-from adoc_link_checker.context import LinkCheckContext
-from adoc_link_checker.report import write_report
-from adoc_link_checker.processing import process_file
-from adoc_link_checker.exclusions import load_excluded_urls
+from adoc_link_checker.core.discovery import find_adoc_files
+from adoc_link_checker.core.context import LinkCheckContext
+from adoc_link_checker.reporting.json import write_report
+from adoc_link_checker.core.processing import process_file
+from adoc_link_checker.utils.exclusions import load_excluded_urls
 
 logger = logging.getLogger(__name__)
 
