@@ -52,6 +52,9 @@ def run_check(
 
     write_report(output_file, broken_links)
 
+    if not broken_links:
+        logger.info("✅ No broken links found.")
+
     if fail_on_broken and broken_links:
         logger.error("❌ Broken links detected.")
         sys.exit(1)
