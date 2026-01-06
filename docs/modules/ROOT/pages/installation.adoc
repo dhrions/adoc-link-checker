@@ -7,8 +7,8 @@
 
 === Prérequis
 
-- **Python 3.8 ou supérieur**.
-- **pip** pour l’installation des dépendances.
+- **Python 3.8 ou supérieur**
+- **pip** pour l’installation des dépendances
 
 === Installation depuis le dépôt Git
 
@@ -24,6 +24,7 @@ pip install -e .
 === Fichier d’exclusion
 
 Créez un fichier `exclude_urls.txt` pour lister les liens à exclure (un par ligne) :
+
 ----
 https://exemple.com/lien-a-exclure
 https://autre-exemple.com/ignorer
@@ -33,17 +34,16 @@ https://autre-exemple.com/ignorer
 
 [cols="1,2,1"]
 |===
-| Option | Description | Valeur par défaut
+| Option | Description | Valeur
 
-| `--timeout` | Timeout pour les requêtes HTTP (secondes). | `15`
-| `--max-workers` | Nombre maximal de threads. | `5`
-| `--delay` | Délai entre chaque requête (secondes). | `0.5`
-| `--output` | Fichier de sortie (JSON). | `broken_links.json`
-| `--blacklist` | Domaine à ignorer (peut être répété). | `[]`
-| `--exclude-from` | Fichier contenant les liens à exclure. | -
-| `-v, --verbose` | Augmente la verbosité (INFO avec `-v`, DEBUG avec `-vv`). | -
-| `--quiet` | Désactive les logs sauf les erreurs. | -
-| `--log-file` | Fichier pour enregistrer les logs. | -
+| `--timeout` | Timeout pour les requêtes HTTP (secondes) | `15`
+| `--max-workers` | Nombre maximal de threads | `5`
+| `--delay` | Délai entre chaque requête (secondes) | `0.5`
+| `--output` | Fichier de sortie (JSON) | **Obligatoire**
+| `--blacklist` | Domaine à ignorer (répétable) | `[]`
+| `--exclude-from` | Fichier contenant les liens à exclure | -
+| `-v, --verbose` | Augmente la verbosité (`-v` INFO, `-vv` DEBUG) | -
+| `--quiet` | Désactive les logs sauf erreurs | -
 |===
 
 === Exemple de configuration avancée
@@ -57,6 +57,9 @@ adocx check-links ./docs \
   --output rapport.json \
   -vv
 ----
+
+IMPORTANT: L’option `--output` est obligatoire.  
+Aucun fichier de sortie n’est généré par défaut.
 
 == 🔧 Configuration permanente
 
@@ -81,24 +84,29 @@ ADOC_LINK_CHECKER_MAX_WORKERS=10
 
 [source,bash]
 ----
-adoc-link-checker --version
-# Doit afficher : adoc-link-checker, version 1.0.0
+adocx --version
 ----
 
 == ⚠️ Dépannage
 
 === Erreur : `ModuleNotFoundError: No module named 'adoc_link_checker'`
 
-- Vérifiez que Python et pip sont à jour.
-- Réinstallez le package : `pip install --force-reinstall adoc-link-checker`.
+- Vérifiez que Python et pip sont à jour
+- Réinstallez le package :
++
+[source,bash]
+----
+pip install --force-reinstall adoc-link-checker
+----
 
 === Erreur : `Permission denied`
 
-- Utilisez `pip install --user adoc-link-checker` ou un environnement virtuel :
+- Utilisez `pip install --user` ou un environnement virtuel :
++
 [source,bash]
 ----
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
+source venv/bin/activate  # Linux / macOS
 venv\Scripts\activate     # Windows
 pip install adoc-link-checker
 ----
@@ -112,4 +120,5 @@ pip install --upgrade adoc-link-checker
 
 == 📜 Licence
 
-Ce projet est sous licence MIT. Voir le fichier xref:https://github.com/ton-org/adoc-link-checker/blob/main/LICENSE[LICENSE^] pour plus de détails.
+Ce projet est sous licence MIT.  
+Voir le fichier xref:https://github.com/ton-org/adoc-link-checker/blob/main/LICENSE[LICENSE^] pour plus de détails.

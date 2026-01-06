@@ -26,7 +26,7 @@ adocx check-links ./docs --output report.json
 | Option | Description | Obligatoire
 
 | `<FILE_OR_DIR>` | Fichier `.adoc` ou dossier à analyser | Oui
-| `--output` | Fichier JSON de sortie | Oui
+| `--output` | Fichier JSON de sortie (**aucun défaut**) | Oui
 | `--timeout` | Timeout HTTP (secondes) | Non
 | `--max-workers` | Nombre de threads | Non
 | `--delay` | Délai entre requêtes | Non
@@ -50,8 +50,8 @@ adocx check-links ./docs \
 
 == 📌 Notes importantes
 
-- Le fichier de sortie est **toujours explicite**
+- L’option `--output` est **obligatoire**
 - Aucun fichier n’est généré par défaut
-- Le code retour est `0` même si des liens sont cassés
+- L’absence de `--output` provoque une erreur CLI
+- Le code retour est `0` même si des liens sont cassés  
   (option `--fail-on-broken` prévue)
-

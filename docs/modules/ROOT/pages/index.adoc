@@ -30,8 +30,11 @@ Il est conçu pour être :
 adocx check-links <FILE_OR_DIR> --output report.json
 ----
 
+IMPORTANT: L’option `--output` est **obligatoire**.  
+Aucun rapport n’est généré si elle n’est pas fournie.
+
 - `<FILE_OR_DIR>` : fichier `.adoc` ou dossier
-- `--output` : **obligatoire**, fichier JSON de sortie
+- `--output` : fichier JSON de sortie (**obligatoire**)
 
 == 📌 Exemple rapide
 
