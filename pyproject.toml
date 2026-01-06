@@ -1,6 +1,6 @@
 [project]
 name = "adoc-link-checker"
-version = "0.2.0"
+version = "0.2.1"
 description = "CLI tool to detect broken HTTP/HTTPS links in AsciiDoc files"
 readme = "README.md"
 license = { text = "MIT" }
